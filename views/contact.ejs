@@ -1,12 +1,11 @@
 <h1>Contact List</h1>
 <br>
-  <% if (!contacts.length === 0) { %>
-    <div class="alert alert-danger fw-bold" role="alert">
-      Data Contact tidak tersedia. 
-    </div>
-  <% } %>
   <div class="container">
-    
+    <% if (!contacts.length === 0) { %>
+      <div class="alert alert-danger fw-bold" role="alert">
+        Data Contact tidak tersedia. 
+      </div>
+    <% } %>
     <!-- <h4 class="p-3">Ini adalah daftar kontak</h4> -->
     <p class="p-1">Ini dalah beberapa List daftar kontak yang tersedia :</p>
     <a href="/contact/add" class="btn btn-primary mb-2">Tambah data Contact</a>

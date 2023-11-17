@@ -72,34 +72,16 @@ app.get('/about', (req, res) => {
 
 // Penanganan rute untuk halaman contact
 app.get('/contact', (req, res) => {
-    // const contact = [
-    //     {
-    //         nama: "Rafi'ul Huda",
-    //         mobile: "081283288739",
-    //         email: "rafiulhuda@gmail.com"
-    //     },
-    //     {
-    //         nama: "Rafiul",
-    //         mobile: "081283288789",
-    //         email: "rafiul@gmail.com"
-    //     },
-    //     {
-    //         nama: "Raya Adinda Jayadi Ahmad",
-    //         mobile: "081283288773",
-    //         email: "rayaAdinda01@gmail.com"
-    //     }
-    // ];
-    const contacts = loadContact(); 
-    
-    // // Memeriksa apakah ada data kontak
-    // if (contact.length === 0) {
-    //     // Jika tidak ada, menampilkan pesan bahwa belum ada kontak yang tersedia
-    //     res.render('contact', {
-    //         title: 'Kontak',
-    //         message: 'Maaf, Belum ada daftar kontak yang tersedia.'
-    //     });
-    // } else {
-        // Jika ada, menampilkan data kontak di halaman kontak
+    const contacts = loadContact();
+
+    if (contacts.length === 0) {
+        res.render('contact', {
+            title: 'Kontak',
+            msg: 'Data Contact tidak tersedia.', // Pesan ketika data kosong
+            layout: 'layout/main-layout',
+            contacts: []
+        });
+    } else {
         res.render('contact', {
             title: 'Kontak',
             contacts,
@@ -107,8 +89,7 @@ app.get('/contact', (req, res) => {
             layout: 'layout/main-layout',
         });
     }
-);
-
+});
 // Halaman form tambah data contct
 app.get('/contact/add', (req, res) => {
     res.render('add-contact', {
@@ -127,7 +108,13 @@ app.post('/contact', [
         return true;
     }),
     check('email', 'Email tidak valid!').isEmail(),
-    check('mobile', 'Nomor Handphone tidak valid!').isMobilePhone('id-ID')
+    check('mobile', 'Nomor Handphone tidak valid!').isMobilePhone('id-ID').custom((value) => {
+        const duplikatNomor = cekDuplikat(value, 'mobile');
+        if (duplikatNomor) {
+            throw new Error('Nomor Handphone sudah digunakan!');
+        }
+        return true;
+    }),
 ], (req, res) => {
     const errors = validationResult(req);
     if(!errors.isEmpty()){
