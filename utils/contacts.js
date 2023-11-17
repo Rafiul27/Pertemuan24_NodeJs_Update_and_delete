@@ -35,11 +35,12 @@ const addContact = (contact) => {
     saveContacts(contacts);
 }
 
-// cek nama atau nomor handphone yang duplikat
-const cekDuplikat = (nama, field = 'nama') => {
+// cek nama yang duplikat
+const cekDuplikat = (nama) => {
     const contacts = loadContact();
-    return contacts.find((contact) => contact[field] === nama);
+    return contacts.find((contact) => contact.nama === nama);
 }
+
 
 // hapus contact
 const deleteContact = (nama) => {

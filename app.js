@@ -108,13 +108,7 @@ app.post('/contact', [
         return true;
     }),
     check('email', 'Email tidak valid!').isEmail(),
-    check('mobile', 'Nomor Handphone tidak valid!').isMobilePhone('id-ID').custom((value) => {
-        const duplikatNomor = cekDuplikat(value, 'mobile');
-        if (duplikatNomor) {
-            throw new Error('Nomor Handphone sudah digunakan!');
-        }
-        return true;
-    }),
+    check('mobile', 'Nomor Handphone tidak valid!').isMobilePhone('id-ID')
 ], (req, res) => {
     const errors = validationResult(req);
     if(!errors.isEmpty()){
@@ -163,19 +157,26 @@ app.get('/contact/edit/:nama', (req, res) => {
 app.post('/contact/update', [
     body('nama').custom((value, { req}) => {
         const duplikat = cekDuplikat(value);
-        if(value !== req.body.oldNama && duplikat){
+        if(duplikat){
             throw new Error('Nama contact sudah digunakan!')
         }
         return true;
     }),
     check('email', 'Email tidak valid!').isEmail(),
-    body('mobile').custom((value) => {
-        const duplikat = cekDuplikat(value);
-        if(duplikat){
-            throw new Error('Nomor contact sudah digunakan!')
-        }
-        return true;
-    }),
+    // body('mobile').custom((value) => {
+    //     const duplikat = cekDuplikat(value);
+    //     if(duplikat){
+    //         throw new Error('Nomor contact sudah digunakan!')
+    //     }
+    //     return true;
+    // }),
+    // check('mobile', 'Nomor Handphone tidak valid!').isMobilePhone('id-ID').custom((value) => {
+    //     const duplikatNomor = cekDuplikat(value, 'mobile');
+    //     if (duplikatNomor) {
+    //         throw new Error('Nomor Handphone sudah digunakan!');
+    //     }
+    //     return true;
+    // }),
     check('mobile', 'Nomor Handphone tidak valid!').isMobilePhone('id-ID')
 ], (req, res) => {
     const errors = validationResult(req);
